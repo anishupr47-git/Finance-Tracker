@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useCallback} from 'react';
+import {useState, useMemo, useCallback} from 'react';
 import './Income.css';
 
 const INTIAL_INFLOWS = [];
@@ -37,14 +37,6 @@ export default function Income() {
     }).format(value);
   }, []);
 
-  const formatPercentage = useCallback((value)=> {
-    return new Intl.NumberFormat('en-US', {
-        style: 'percent',
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
-    }).format(value/100);
-  },);
-
   //Controlled Form Actions
   const handleInflowChange = (e) => {
     const {name,value} = e.target;
@@ -79,7 +71,7 @@ export default function Income() {
     }
 
     if (hasError) {
-        setInflowErrors(erros);
+        setInflowErrors(errors);
         setInflowShake(true);
         setTimeout(()=>setInflowShake(false),500);
         return;
@@ -129,7 +121,7 @@ export default function Income() {
         date: new Date().toISOString().split('T')[0]
     };
 
-    setOutflow((prev)=>[newOutflow, ...prev]);
+    setOutflows((prev)=>[newOutflow, ...prev]);
     setOutflowForm({title:'',amount:'', tag:'Housing'});
     setOutflowErrors({title: '', amount: ''});
   };
@@ -174,7 +166,7 @@ export default function Income() {
         retentionRate,
         expenseReduction
     };
-  }, [inflow, outflows]);
+  }, [inflows, outflows]);
 
   // Custom Autonomous
   const advisoryReports = useMemo(()=> {
@@ -556,7 +548,7 @@ export default function Income() {
                             placeholder='Outflow Description...'
                             className='form-field'
                             value={outflowForm.title}
-                            onChange={handleInflowChange}
+                            onChange={handleOutflowChange}
                             aria-label='Outflow Title'
                         />
                         {outflowErrors.title ? (
@@ -807,8 +799,8 @@ export default function Income() {
                                 <tr key={proj.years}>
                                     <td style={{fontWeight: 700}}>Yr {proj.years}</td>
                                     <td>{formatCurrency(proj.linear)}</td>
-                                    <td className='proj-compound'>{formatCurrency(proj.compounded)}</td>
-                                    <td style={{color: proj.premium > 0 ? 'var(--accent-emerald' : 'var(--text-secondary)',fontWeight:600}}>
+                                    <td className='proj-compound'>{formatCurrency(proj.compoundedAccumulated)}</td>
+                                    <td style={{color: proj.premium > 0 ? 'var(--accent-emerald)' : 'var(--text-secondary)',fontWeight:600}}>
                                         +{formatCurrency(proj.premium)}
                                     </td>
                                 </tr>
