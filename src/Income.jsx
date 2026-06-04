@@ -313,9 +313,6 @@ export default function Income() {
             <div className='brand-section'>
                 <h1>Finance Tracker</h1>
                 <p>Interactive financial ledger and savings planner</p>
-                <span style={{fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginTop:'0.25rem'}}>
-                    Hint: Configure a Target Savings Goal in the header to project linear and compounding estimates.
-                </span>
             </div>
 
             <div className='goal-controller'>
@@ -330,8 +327,8 @@ export default function Income() {
                     aria-label='Target Savings Goal'
                     />
                 </div>
-                <button className='btn-delete' style={{padding:'0.2rem 0.5rem', fontSize:'0.8rem', fontWeight:700}} onClick={()=>adjustGoal(10000)}>$10k</button>
-                <button className='btn-delete' style={{padding: '0.2rem 0.5rem', fontSize:'0.8rem', fontWeight:700}} onClick={()=> adjustGoal(50000)}>50k</button>
+                <button className='btn-delete' onClick={()=>adjustGoal(10000)}>$10k</button>
+                <button className='btn-delete' onClick={()=> adjustGoal(50000)}>50k</button>
             </div>
         </header>
         {/*Four-Core Key Indicators Banner */}
@@ -367,7 +364,7 @@ export default function Income() {
                 </div>
                 <div className='metric-body'>
                     <div className='metric-value-group'>
-                        <div className='metric-value' style={{color: computations.netSavings >= 0? 'var(--accent-emerald)':'var(--accent-rose)'}}>
+                        <div className='metric-value'>
                             {formatCurrency(computations.netSavings)}
                         </div>
                         <span className='metric-subtext'>Net savings volume</span>
@@ -427,10 +424,8 @@ export default function Income() {
                             onChange={handleInflowChange}
                             aria-label='Inflow Description'
                             />
-                            {inflowErrors.description ? (
+                            {inflowErrors.description && (
                                 <span className='form-error-msg'>{inflowErrors.description}</span>
-                            ) : (
-                                <span className='form-hint-text'>e.g., salary, dividend</span>
                             )}
                         </div>
 
@@ -448,10 +443,8 @@ export default function Income() {
                                 aria-label='Inflow Amount'
                                 />
                             </div>
-                            {inflowErrors.amount ? (
+                            {inflowErrors.amount && (
                                 <span className='form-error-msg'>{inflowErrors.amount}</span>
-                            ) : (
-                                <span className='form-hint-text'>Active intake value</span>
                             )}
                         </div>
 
@@ -467,7 +460,6 @@ export default function Income() {
                                 <option value='Side Hustle'>Side Hustle</option>
                                 <option value='Investments'>Investments</option>
                             </select>
-                            <span className='form-hint-text'>Revenue Classification</span>
                         </div>
 
                         <button type='submit' className='btn-submit'>
@@ -517,7 +509,7 @@ export default function Income() {
                                                 onClick={()=>deleteInflow(item.id)}
                                                 title='Remove Transaction Entry'
                                                 aria-label={`Delete ${item.description}`}
-                                                ></button>
+                                                >Delete</button>
                                             </td>
                                         </tr>
                                     ))
@@ -547,10 +539,8 @@ export default function Income() {
                             onChange={handleOutflowChange}
                             aria-label='Outflow Title'
                         />
-                        {outflowErrors.title ? (
+                        {outflowErrors.title && (
                             <span className='form-error-msg'>{outflowErrors.title}</span>
-                        ) : (
-                            <span className='form-hint-text'>e.g., rent, groceries</span>
                         )}
                         </div>
 
@@ -569,10 +559,8 @@ export default function Income() {
                                 />
 
                             </div>
-                            {outflowErrors.amount ? (
+                            {outflowErrors.amount && (
                                 <span className='form-error-msg'>{outflowErrors.amount}</span>
-                            ): (
-                                <span className='form-hint-text'>Outflow Volume</span>
                             )}
                         </div>
 
@@ -590,10 +578,9 @@ export default function Income() {
                                 <option value='Insurance'>Insurance</option>
                                 <option value='Other'>Other</option>
                             </select>
-                            <span className='form-hint-text'>Cost stream group</span>
                         </div>
 
-                        <button type='submit' className='btn-submit' style={{background:'linear-gradient(135deg, var(--accent-rose) 0%, var(--accent-purple) 100%'}}>
+                        <button type='submit' className='btn-submit'>
                             <span>+ Record</span>
                         </button>
                     </form>
@@ -638,7 +625,7 @@ export default function Income() {
                                                 onClick={()=>deleteOutflow(item.id)}
                                                 title='Remove transaction entry'
                                                 aria-label={`Delete ${item.title}`}
-                                                ></button>
+                                                >Delete</button>
                                             </td>
                                         </tr>
                                     ))
@@ -733,9 +720,6 @@ export default function Income() {
                             onChange={(e)=> setCompoundRate(parseFloat(e.target.value))}
                             aria-label='Expected Investment Yield APY'
                             />
-                            <span className='form-hint-text'>
-                                Standard capital yield modeling
-                            </span>
                         </div>
 
                         {/* Compounding Horizon Projection Slider */}
@@ -754,16 +738,13 @@ export default function Income() {
                             onChange={(e)=> setForecastHorizon(parseInt(e.target.value))}
                             aria-label='Forecast Projection Horizon Years'
                             />
-                            <span className='form-hint-text'>
-                                Sets time horizon for compound vs. linear table growth estimates
-                            </span>
                         </div>
                         {/*Dynamic Forecast Narrative*/}
               {runwayAnalysis.isUnreachable ? (
                 <div className="forecast-result-card unreachable">
                   <h3 className="forecast-result-title">Uh-Oh, Cash Alert!</h3>
                   <p className="forecast-result-text">
-                    You are spending <span className="forecast-highlight" style={{ borderColor: 'var(--accent-rose)' }}>way more</span> than you make. You gotta cut down on spending so your money can actually grow!
+                    You are spending <span className="forecast-highlight">way more</span> than you make. You gotta cut down on spending so your money can actually grow!
                   </p>
                 </div>
               ) : (
@@ -793,10 +774,10 @@ export default function Income() {
                         <tbody>
                             {runwayAnalysis.compoundProjections.map((proj)=> (
                                 <tr key={proj.years}>
-                                    <td style={{fontWeight: 700}}>Yr {proj.years}</td>
+                                    <td>Yr {proj.years}</td>
                                     <td>{formatCurrency(proj.linear)}</td>
                                     <td className='proj-compound'>{formatCurrency(proj.compounded)}</td>
-                                    <td style={{color: proj.premium > 0 ? 'var(--accent-emerald)' : 'var(--text-secondary)',fontWeight:600}}>
+                                    <td>
                                         +{formatCurrency(proj.premium)}
                                     </td>
                                 </tr>
