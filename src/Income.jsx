@@ -168,18 +168,18 @@ export default function Income() {
     };
   }, [inflows, outflows]);
 
-  // Custom Autonomous
+  // Strategy Advisor Reports
   const advisoryReports = useMemo(()=> {
     const {grossInflow, netSavings, retentionRate, expenseReduction} = computations;
     const reports = [];
 
-    if (grossInflow ===0){
+    if (grossInflow === 0){
         return [{
             id: 'no-income',
             type: 'danger',
-            title: 'Complete liquidity freeze',
-            desc: 'No gross income recorded. Register income cash channels to see calulations.',
-            icon: '🛑'
+            title: 'No income recorded',
+            desc: 'Please enter income transactions to view financial calculations.',
+            icon: ''
         }];
     }
 
@@ -190,9 +190,9 @@ export default function Income() {
         reports.push({
             id:'overhead-stress',
             type: 'danger',
-            title: 'Overhead distress detected',
-            desc: `Housing expenses represent ${housingPercent.toFixed(1)}% of your gross inflows, exceeding the standard threshold by ${excessRate.toFixed(1)}%. Consider scaling auxiliary contract work or seeking structural consolidation.`,
-            icon: '🚨'
+            title: 'High housing expenses',
+            desc: `Housing expenses represent ${housingPercent.toFixed(1)}% of your gross inflows, which is ${excessRate.toFixed(1)}% higher than the recommended 40% threshold.`,
+            icon: ''
         });
     }
 
@@ -203,9 +203,9 @@ export default function Income() {
         reports.push({
             id:'discretionary-leak',
             type: 'warning',
-            title: 'Discrtionary leak warnings',
-            desc: `Entertainment occupies ${entertainmentPercent.toFixed(1)}% of total inflows. Reducing this category down to the recommended 15% threshold saves a net ${formatCurrency(overspendAmount)}/month.`,
-            icon: '⚠️'
+            title: 'High entertainment spending',
+            desc: `Entertainment occupies ${entertainmentPercent.toFixed(1)}% of total inflows. Reducing this to the recommended 15% would save ${formatCurrency(overspendAmount)}/month.`,
+            icon: ''
         });
     }
 
@@ -215,31 +215,31 @@ export default function Income() {
             id: 'tier-critical',
             type: 'danger',
             title: 'Negative cash flow alert',
-            desc: `Warning: You are burning liquidity at ${formatCurrency(Math.abs(netSavings))}/month. Audit variable expense records immediately to seal structural leaks,`,
+            desc: `Warning: expenses exceed income by ${formatCurrency(Math.abs(netSavings))}/month. Review your spending to reduce outflows.`,
             icon: ''
         });
     } else if (retentionRate < 15) {
         reports.push({
             id: 'tier-warning',
             type: 'warning',
-            title: 'Suboptimal savings rate',
-            desc: `Your wealth retention efficiency of ${retentionRate.toFixed(1)}% falls short of the recommended 15% safety tier. Increase monthly side hustles or optimize variable outflows.`,
+            title: 'Low savings rate',
+            desc: `Your savings rate of ${retentionRate.toFixed(1)}% is below the recommended 15% threshold.`,
             icon: ''
         });
     } else if (retentionRate >= 30) {
         reports.push({
             id: 'tier-elite',
             type: 'success',
-            title: 'Elite wealth builder status',
-            desc: `Outstanding efficieny! Retaining ${retentionRate.toFixed(1)}% of gross monthly intake ranks you in the elite capital accumulation bracket. Compounding curves will accelerate`,
+            title: 'High savings rate',
+            desc: `Outstanding! You are saving ${retentionRate.toFixed(1)}% of your monthly income.`,
             icon: ''
         });
     } else {
         reports.push({
             id: 'tier-healthy',
             type: 'success',
-            title: 'Balanced wealth accumulation',
-            desc: `Solid performance. Retaining ${retentionRate.toFixed(1)}% of income allows you to simultaneously finance current standards while funding long-term strategic assets.`,
+            title: 'Steady savings rate',
+            desc: `You are saving ${retentionRate.toFixed(1)}% of your monthly income.`,
             icon: ''
         });
     }
@@ -311,15 +311,15 @@ export default function Income() {
         {/*main dashboard */}
         <header className='dashboard-header'>
             <div className='brand-section'>
-                <h1>Wealth Core</h1>
-                <p>Interactive Ledger & Autonomous Wealth Retention Engine</p>
+                <h1>Finance Tracker</h1>
+                <p>Interactive financial ledger and savings planner</p>
                 <span style={{fontSize: '0.75rem', color: 'var(--text-muted)', display: 'block', marginTop:'0.25rem'}}>
-                    Hint: Configure a dynamic Target Capital Goal in the header to project linear and compounding runway estimates.
+                    Hint: Configure a Target Savings Goal in the header to project linear and compounding estimates.
                 </span>
             </div>
 
             <div className='goal-controller'>
-                <span className='goal-label'>Target Capital</span>
+                <span className='goal-label'>Target Savings</span>
                 <div className='goal-input-wrapper'>
                     <span className='goal-currency-symbol'>$</span>
                     <input
@@ -327,25 +327,24 @@ export default function Income() {
                     className='goal-input'
                     value={savingsGoal}
                     onChange={(e)=>setSavingsGoal(Math.max(0, parseInt(e.target.value)||0))}
-                    aria-label='Target Capital Savings Goal'
+                    aria-label='Target Savings Goal'
                     />
                 </div>
-                <button className='btn-delete' style={{padding:'0.2rem 0.5rem', fontSize:'0.8rem', fontWeight:700}} onClick={()=>adjustGoal(10000)}>+$10k</button>
-                <button className='btn-delete' style={{padding: '0.2rem 0.5rem', fontSize:'0.8rem', fontWeight:700}} onClick={()=> adjustGoal(50000)}>+50k</button>
+                <button className='btn-delete' style={{padding:'0.2rem 0.5rem', fontSize:'0.8rem', fontWeight:700}} onClick={()=>adjustGoal(10000)}>$10k</button>
+                <button className='btn-delete' style={{padding: '0.2rem 0.5rem', fontSize:'0.8rem', fontWeight:700}} onClick={()=> adjustGoal(50000)}>50k</button>
             </div>
         </header>
         {/*Four-Core Key Indicators Banner */}
-        <section className='metrics-grid' aria-label='Key Performance Indictors'>
+        <section className='metrics-grid' aria-label='Key Performance Indicators'>
             {/*Gross Inflow*/}
             <article className='metric-card inflow-card'>
                 <div className='metric-header'>
                     <span className='metric-title'>Gross Inflows</span>
-                    <div className='metric-icon-badge'>▲</div>
                 </div>
                 <div className='metric-body'>
                     <div className='metric-value-group'>
                         <div className='metric-value'>{formatCurrency(computations.grossInflow)}</div>
-                        <span className='metric-subtext'>Total active cash receipts</span>
+                        <span className='metric-subtext'>Total income</span>
                     </div>
                 </div>
             </article>
@@ -353,12 +352,11 @@ export default function Income() {
             <article className='metric-card outflow'>
                 <div className='metric-header'>
                     <span className='metric-title'>Gross Outflows</span>
-                    <div className='metric-icon-badge'>▼</div>
                 </div>
                 <div className='metric-body'>
                     <div className='metric-value-group'>
                         <div className='metric-value'>{formatCurrency(computations.grossOutflow)}</div>
-                        <span className='metric-subtext'>Aggregated expenditure volume</span>
+                        <span className='metric-subtext'>Total expenses</span>
                     </div>
                 </div>
             </article>
@@ -366,26 +364,24 @@ export default function Income() {
             <article className='metric-card net'>
                 <div className='metric-header'>
                     <span className='metric-title'>Net Savings</span>
-                    <div className='metric-icon-badge'>◆</div>
                 </div>
                 <div className='metric-body'>
                     <div className='metric-value-group'>
                         <div className='metric-value' style={{color: computations.netSavings >= 0? 'var(--accent-emerald)':'var(--accent-rose)'}}>
                             {formatCurrency(computations.netSavings)}
                         </div>
-                        <span className='metric-subtext'>Residual cash flow yield</span>
+                        <span className='metric-subtext'>Net savings volume</span>
                     </div>
                 </div>
             </article>
             {/* Capital Retention */}
             <article className='metric-card retention-card'>
                 <div className='metric-header'>
-                    <span className='metric-title'>Retention Efficiency</span>
-                    <div className='metric-icon-badge'>✦</div>
+                    <span className='metric-title'>Savings Rate</span>
                 </div>
                 <div className='metric-body'>
                     <div className='metric-value-group'>
-                        <div className='metric-subtext'>Rate of intake retained</div>
+                        <span className='metric-subtext'>Percentage of income saved</span>
                     </div>
 
                     <div className='metric-vis-container'>
@@ -497,7 +493,7 @@ export default function Income() {
                                         <td colSpan='5'>
                                             <div className='table-empty-state'>
                                                 <span className='empty-state-icon'></span>
-                                                <p>No active cash receipt items registered in current matrix</p>
+                                                <p>No income transactions added yet.</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -619,7 +615,7 @@ export default function Income() {
                                         <td colSpan="5">
                                             <div className='table-empty-state'>
                                                 <span className='empty-state-icon'></span>
-                                                <p>No active debit records registered in current matrix.</p>
+                                                <p>No expense transactions added yet.</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -654,10 +650,10 @@ export default function Income() {
             </div>
             {/*Right Column: Strategy, Advisory & Forecasting System */}
             <aside className='strategy-column'>
-                {/* Autonomous Advisor Engine */}
-                <section className='strategy-panel' aria-label='Autonomous AI Advisor Panel'>
+                {/* Strategy Advisor */}
+                <section className='strategy-panel' aria-label='Strategy Advisor Panel'>
                     <h2 className='strategy-panel-title'>
-                        <span></span> Autonomous Strategy Enginer
+                        <span></span> Strategy Advisor
                     </h2>
                     <div className='advisor-banners-container'>
                         {advisoryReports.map((report)=> (
@@ -735,18 +731,18 @@ export default function Income() {
                             className='simulator-range-input'
                             value={compoundRate}
                             onChange={(e)=> setCompoundRate(parseFloat(e.target.value))}
-                            aria-label='Expected Investments Yield APY Percentage'
+                            aria-label='Expected Investment Yield APY'
                             />
                             <span className='form-hint-text'>
-                                Models Capital Returns (e.g., 4-6% conservative, 8-10% aggressive)
+                                Standard capital yield modeling
                             </span>
                         </div>
 
-                        {/* Compounding Horizone Projection Slider */}
+                        {/* Compounding Horizon Projection Slider */}
                         <div className='simulator-slider-group'>
                             <div className='slider-header'>
                                 <span>Forecast Projection Horizon</span>
-                                <span className='slider-value'>{forecastHorizon}Years</span>
+                                <span className='slider-value'>{forecastHorizon} Years</span>
                             </div>
                             <input
                             type='range'
@@ -765,20 +761,20 @@ export default function Income() {
                         {/*Dynamic Forecast Narrative*/}
               {runwayAnalysis.isUnreachable ? (
                 <div className="forecast-result-card unreachable">
-                  <h3 className="forecast-result-title">Deficit Runway Alert</h3>
+                  <h3 className="forecast-result-title">Uh-Oh, Cash Alert!</h3>
                   <p className="forecast-result-text">
-                    Your runway is currently <span className="forecast-highlight" style={{ borderColor: 'var(--accent-rose)' }}>unreachable</span> due to negative net monthly cash flows. Re-align spending dynamics to initiate positive capital compounding vectors.
+                    You are spending <span className="forecast-highlight" style={{ borderColor: 'var(--accent-rose)' }}>way more</span> than you make. You gotta cut down on spending so your money can actually grow!
                   </p>
                 </div>
               ) : (
                 <div className="forecast-result-card">
-                  <h3 className="forecast-result-title">Strategic Goal Target Forecast</h3>
+                  <h3 className="forecast-result-title">Goal Target Forecast</h3>
                   <p className="forecast-result-text">
                     At your current monthly savings rate of {formatCurrency(computations.netSavings)}, you will achieve your target of {formatCurrency(savingsGoal)} in{' '}
                     <span className="forecast-highlight">
                       {runwayAnalysis.monthsToGoal.toFixed(1)} months
                     </span>{' '}
-                    ({(runwayAnalysis.monthsToGoal / 12).toFixed(1)} years) under standard linear growth trajectories.
+                    ({(runwayAnalysis.monthsToGoal / 12).toFixed(1)} years) under linear growth.
                   </p>
                 </div>
               )}
@@ -788,7 +784,7 @@ export default function Income() {
                     <table className='projection-table'>
                         <thead>
                             <tr>
-                                <th>Horizone</th>
+                                <th>Horizon</th>
                                 <th>Linear Savings</th>
                                 <th>Compound Yield</th>
                                 <th>Compound Premium</th>
@@ -799,7 +795,7 @@ export default function Income() {
                                 <tr key={proj.years}>
                                     <td style={{fontWeight: 700}}>Yr {proj.years}</td>
                                     <td>{formatCurrency(proj.linear)}</td>
-                                    <td className='proj-compound'>{formatCurrency(proj.compoundedAccumulated)}</td>
+                                    <td className='proj-compound'>{formatCurrency(proj.compounded)}</td>
                                     <td style={{color: proj.premium > 0 ? 'var(--accent-emerald)' : 'var(--text-secondary)',fontWeight:600}}>
                                         +{formatCurrency(proj.premium)}
                                     </td>
