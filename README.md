@@ -12,3 +12,7 @@ The core stack and architecture of this app revolves around React.JSX. React 18+
 
 # FINALLY
 The core principal and the reason for making this app is so people can anytime visit and find a way to manage their finances and get suggestions on improving their saving goals and track their incoming and outgoing flow. Also the app is made with love and self done code so the users can have good time managing their finances with decorative charts and good AI suggestions to improve their finances.
+
+
+<img width="2560" height="1225" alt="Screenshot (394)" src="https://github.com/user-attachments/assets/5d42a01d-bf53-4361-8d01-7fb7accb8367" />
+<img width="2560" height="1027" alt="Screenshot (393)" src="https://github.com/user-attachments/assets/b1c18293-644a-46e2-8bc4-9c88474cf5dd" />
