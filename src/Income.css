@@ -27,12 +27,12 @@ body {
     padding: 20px;
 }
 
-.dashboard-shell {
+.dash-shell {
     max-width: 1000px;
     margin: 0 auto;
 }
 
-.dashboard-header {
+.dash-header {
     border-bottom: 2px solid #000000;
     padding-bottom: 15px;
     margin-bottom: 20px;
@@ -75,61 +75,61 @@ body {
     font-size: 14px;
 }
 
-.metrics-grid {
+.metrs-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
     margin-bottom: 20px;
 }
 
-.metric-card {
+.metr-card {
     border: 1px solid #000000;
     padding: 15px;
     background: #ffffff;
 }
 
-.metric-title {
+.metr-title {
     font-size: 12px;
     font-weight: bold;
     display: block;
     margin-bottom: 10px;
 }
 
-.metric-value {
+.metr-value {
     font-size: 20px;
     font-weight: bold;
 }
 
-.metric-subtext {
+.metr-subtext {
     font-size: 11px;
     margin-top: 5px;
 }
 
-.metric-vis-container {
+.metr-vis-container {
     width: 40px;
     height: 40px;
     position: relative;
     display: inline-block;
 }
 
-.progress-circle-svg {
+.prog-svg {
     width: 100%;
     height: 100%;
 }
 
-.progress-circle-bg {
+.prog-bg {
     fill: none;
     stroke: #e0e0e0;
     stroke-width: 4;
 }
 
-.progress-circle-fill {
+.prog-fill {
     fill: none;
     stroke: #000000;
     stroke-width: 4;
 }
 
-.progress-circle-text {
+.prog-text {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -138,41 +138,41 @@ body {
     font-weight: bold;
 }
 
-.dashboard-grid {
+.dash-grid {
     display: grid;
     grid-template-columns: 1fr 300px;
     gap: 20px;
 }
 
-.ledger-container {
+.led-container {
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-.ledger-panel {
+.led-panel {
     border: 1px solid #000000;
     padding: 15px;
 }
 
-.ledger-panel-header {
+.led-panel-header {
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.ledger-panel-title h2 {
+.led-panel-title h2 {
     font-size: 18px;
 }
 
-.ledger-badge {
+.led-badge {
     border: 1px solid #000000;
     padding: 2px 6px;
     font-size: 12px;
 }
 
-.ledger-form {
+.led-form {
     display: grid;
     grid-template-columns: 2fr 1fr 1fr auto;
     gap: 10px;
@@ -229,24 +229,24 @@ body {
     color: #ffffff;
 }
 
-.ledger-table-wrapper {
+.leddg-table-wrapper {
     border: 1px solid #000000;
     width: 100%;
 }
 
-.ledger-table {
+.leddg-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.ledger-table th, .ledger-table td {
+.leddg-table th, .leddg-table td {
     border: 1px solid #000000;
     padding: 8px;
     font-size: 13px;
     text-align: left;
 }
 
-.ledger-table th {
+.leddg-table th {
     background: #ffffff;
     font-weight: bold;
 }
@@ -311,123 +311,123 @@ body {
     font-size: 12px;
 }
 
-.expense-distribution-list {
+.expense-distri-list {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.distribution-row {
+.distri-row {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.distribution-meta {
+.distri-meta {
     display: flex;
     justify-content: space-between;
     font-size: 12px;
 }
 
-.distribution-label {
+.distri-label {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.distribution-indicator-dot {
+.distri-indicator-dot {
     display: none; /* Hide colorful dots */
 }
 
-.distribution-values {
+.distri-values {
     font-weight: bold;
 }
 
-.tracking-bar-bg {
+.track-bar-bg {
     height: 10px;
     border: 1px solid #000000;
     background: #ffffff;
 }
 
-.tracking-bar-fill {
+.track-bar-fill {
     height: 100%;
     background: #000000;
 }
 
-.simulator-panel {
+.sim-panel {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.simulator-slider-group {
+.sim-slide-group {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
 
-.slider-header {
+.slide-header {
     display: flex;
     justify-content: space-between;
     font-size: 12px;
 }
 
-.slider-value {
+.slide-value {
     font-weight: bold;
 }
 
-.simulator-range-input {
+.sim-range-input {
     width: 100%;
 }
 
-.forecast-result-card {
+.cast-result-card {
     border: 1px solid #000000;
     padding: 10px;
     background: #ffffff;
 }
 
-.forecast-result-title {
+.cast-result-title {
     font-size: 12px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-.forecast-result-text {
+.cast-result-text {
     font-size: 12px;
 }
 
-.forecast-highlight {
+.cast-highlight {
     font-weight: bold;
 }
 
-.projection-table-wrapper {
+.proj-table-wrapper {
     border: 1px solid #000000;
 }
 
-.projection-table {
+.proj-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.projection-table th, .projection-table td {
+.proj-table th, .proj-table td {
     border: 1px solid #000000;
     padding: 6px;
     font-size: 12px;
 }
 
-.projection-table th {
+.proj-table th {
     background: #ffffff;
     font-weight: bold;
 }
 
 @media (max-width: 900px) {
-    .dashboard-grid {
+    .dash-grid {
         grid-template-columns: 1fr;
     }
-    .metrics-grid {
+    .metrs-grid {
         grid-template-columns: 1fr 1fr;
     }
-    .ledger-form {
+    .leddg-form {
         grid-template-columns: 1fr;
     }
 }

@@ -8,26 +8,25 @@ const INTIAL_OUTFLOWS = [];
 const DEFAULT_SAVINGS_GOAL = 0;
 
 export default function Income() {
-    //Main App place
+    //main app
     const [inflows, setInflows] = useState(INTIAL_INFLOWS);
     const [outflows, setOutflows] = useState(INTIAL_OUTFLOWS);
     const [savingsGoal, setSavingsGoal] = useState(DEFAULT_SAVINGS_GOAL);
 
-    //Income Form place
+    //income
     const [inflowForm, setInflowForm] = useState({ description: '', amount: '', tag: 'Full-Time' });
     const [inflowErrors, setInflowErrors] = useState({ description: '', amount: '' });
-    const [inflow, setInflowShake] = useState(false);
+    const [infloww, setInflowShake] = useState(false);
 
-    //Expense Form place
+   //expense
     const [outflowForm, setOutflowForm] = useState({ title: '', amount: '', tag: 'Housing' });
     const [outflowErrors, setOutflowErrors] = useState({ title: '', amount: '' });
     const [outflowShake, setOutflowShake] = useState(false);
 
-    //Projections place
-    const [compoundRate, setCompoundRate] = useState(8);
-    const [forecastHorizon, setForecastHorizon] = useState(10);
+    
+    const [cr, setcr] = useState(8);
+    const [hori, sethori] = useState(10);
 
-    //Currency & percentage helper
     const formatCurrency = useCallback((value) => {
         return new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -38,7 +37,7 @@ export default function Income() {
     }, []);
 
 
-    const handleInflowChange = (e) => {
+    const inflow = (e) => {
         const { name, value } = e.target;
         setInflowForm((prev) => ({ ...prev, [name]: value }));
         if (inflowErrors[name]) {
@@ -46,7 +45,7 @@ export default function Income() {
         }
     };
 
-    const handleOutflowChange = (e) => {
+    const outflow = (e) => {
         const { name, value } = e.target;
         setOutflowForm((prev) => ({ ...prev, [name]: value }));
         if (outflowErrors[name]) {
@@ -54,21 +53,21 @@ export default function Income() {
         }
     };
 
-    const handleInflowSubmit = (e) => {
+    const inflowsubmit = (e) => {
         e.preventDefault();
         const description = inflowForm.description.trim();
         const amount = parseFloat(inflowForm.amount);
 
-        // Simple validation
+        //validate
         if (!description) {
-            setInflowErrors({ description: 'Description cannot be blank', amount: '' });
+            setInflowErrors({ description: 'Description cant be blank', amount: '' });
             setInflowShake(true);
             setTimeout(() => setInflowShake(false), 500);
             return;
         }
 
         if (isNaN(amount) || amount <= 0) {
-            setInflowErrors({ description: '', amount: 'Amount must be positive' });
+            setInflowErrors({ description: '', amount: 'Amount must be +ve' });
             setInflowShake(true);
             setTimeout(() => setInflowShake(false), 500);
             return;
@@ -87,12 +86,12 @@ export default function Income() {
         setInflowErrors({ description: '', amount: '' });
     };
 
-    const handleOutflowSubmit = (e) => {
+    const outflowsubmit = (e) => {
         e.preventDefault();
         const title = outflowForm.title.trim();
         const amount = parseFloat(outflowForm.amount);
 
-        // Simple validation
+        //simple validate
         if (!title) {
             setOutflowErrors({ title: 'Title cannot be blank', amount: '' });
             setOutflowShake(true);
@@ -120,24 +119,24 @@ export default function Income() {
         setOutflowErrors({ title: '', amount: '' });
     };
 
-    const deleteInflow = (id) => {
+    const deletein = (id) => {
         setInflows((prev) => prev.filter((item) => item.id !== id));
     };
-    const deleteOutflow = (id) => {
+    const deleteout = (id) => {
         setOutflows((prev) => prev.filter((item) => item.id !== id));
     };
 
-    const adjustGoal = (amount) => {
+    const goaladj = (amount) => {
         setSavingsGoal((prev) => Math.max(0, prev + amount));
     };
 
-    //Calculations
-    const computations = useMemo(() => {
+    //calculations
+    const compute = useMemo(() => {
         const grossInflow = inflows.reduce((sum, item) => sum + item.amount, 0);
         const grossOutflow = outflows.reduce((sum, item) => sum + item.amount, 0);
-        const netSavings = grossInflow - grossOutflow;
-        const retentionRate = grossInflow > 0 ? (netSavings / grossInflow) * 100 : 0;
-        // Group expenses by category
+        const saving = grossInflow - grossOutflow;
+        const retention = grossInflow > 0 ? (saving / grossInflow) * 100 : 0;
+        
         let expenseReduction = {
             Housing: 0,
             Food: 0,
@@ -157,15 +156,15 @@ export default function Income() {
         return {
             grossInflow,
             grossOutflow,
-            netSavings,
-            retentionRate,
+            saving,
+            retention,
             expenseReduction
         };
     }, [inflows, outflows]);
 
 
-    const advisoryReports = useMemo(() => {
-        const { grossInflow, netSavings, retentionRate, expenseReduction } = computations;
+    const report = useMemo(() => {
+        const { grossInflow, saving, retention, expenseReduction } = compute;
         const reports = [];
 
         if (grossInflow === 0) {
@@ -173,55 +172,55 @@ export default function Income() {
                 id: 'no-income',
                 type: 'danger',
                 title: 'No income',
-                desc: 'Add some income to see your insights.',
+                desc: 'Add some income data to see insights',
                 icon: ''
             }];
         }
 
-        const housingPercent = (expenseReduction['Housing'] / grossInflow) * 100;
-        if (housingPercent > 40) {
+        const housing = (expenseReduction['Housing'] / grossInflow) * 100;
+        if (housing > 40) {
             reports.push({
                 id: 'overhead-stress',
                 type: 'danger',
                 title: 'High housing costs',
-                desc: `You're spending ${housingPercent.toFixed(1)}% of your income on housing. Try to keep this under 40% if possible.`,
+                desc: `You're spending ${housing.toFixed(1)}% of your income on housing. Try to reduce it for good`,
                 icon: ''
             });
         }
 
-        const entertainmentPercent = (expenseReduction['Entertainment'] / grossInflow) * 100;
-        if (entertainmentPercent > 15) {
+        const entertain = (expenseReduction['Entertainment'] / grossInflow) * 100;
+        if (entertain > 15) {
             reports.push({
                 id: 'discretionary-leak',
                 type: 'warning',
                 title: 'High entertainment spending',
-                desc: `You're spending ${entertainmentPercent.toFixed(1)}% on entertainment. Try keeping it under 15% to save more.`,
+                desc: `You're spending ${entertain.toFixed(1)}% on entertainment. Try keeping it low for future savings`,
                 icon: ''
             });
         }
 
-        if (netSavings < 0) {
+        if (saving < 0) {
             reports.push({
                 id: 'tier-critical',
                 type: 'danger',
                 title: 'Spending more than you earn',
-                desc: `You're spending ${formatCurrency(Math.abs(netSavings))} more than you make. Consider cutting down on some expenses.`,
+                desc: `You're spending ${formatCurrency(Math.abs(saving))} more than you make. Please consider saving otherwise it'll be hard`,
                 icon: ''
             });
-        } else if (retentionRate < 15) {
+        } else if (retention < 15) {
             reports.push({
                 id: 'tier-warning',
                 type: 'warning',
                 title: 'Low savings rate',
-                desc: `You're saving ${retentionRate.toFixed(1)}%, which is a bit below the recommended 15%.`,
+                desc: `You're saving ${retention.toFixed(1)}%, which is a bit below than the recommendation`,
                 icon: ''
             });
-        } else if (retentionRate >= 30) {
+        } else if (retention >= 30) {
             reports.push({
                 id: 'tier-elite',
                 type: 'success',
                 title: 'Great savings rate',
-                desc: `Awesome job! You are saving ${retentionRate.toFixed(1)}% of your income.`,
+                desc: `Awesome job! You are saving ${retention.toFixed(1)}% of your income.`,
                 icon: ''
             });
         } else {
@@ -229,84 +228,85 @@ export default function Income() {
                 id: 'tier-healthy',
                 type: 'success',
                 title: 'Good savings rate',
-                desc: `You are saving ${retentionRate.toFixed(1)}% of your income. Keep it up!`,
+                desc: `You are saving ${retention.toFixed(1)}% of your income. Vamos`,
                 icon: ''
             });
         }
         return reports;
-    }, [computations, formatCurrency]);
+    }, [compute, formatCurrency]);
 
-    // Savings Projections
-    const runwayAnalysis = useMemo(() => {
-        const { netSavings } = computations;
-        const monthlyRate = compoundRate / 100 / 12;
+    //saving projion
+    
+    const analysiss = useMemo(() => {
+        const { saving } = compute;
+        const monthlyRate = cr / 100 / 12;
         const result = {
             monthsToGoal: null,
-            compoundProjections: [],
-            isUnreachable: netSavings <= 0
+            compoundprojs: [],
+            isUnreachable: saving <= 0
         };
 
 
-        if (netSavings > 0) {
-            result.monthsToGoal = savingsGoal / netSavings;
+        if (saving > 0) {
+            result.monthsToGoal = savingsGoal / saving;
         }
 
 
-        const periods = [1, 3, 5, forecastHorizon];
-        const uniquePeriods = [...new Set(periods)].sort((a, b) => a - b);
+        const periods = [1, 3, 5, hori];
+        const uperiods = [...new Set(periods)].sort((a, b) => a - b);
 
-        result.compoundProjections = uniquePeriods.map((years) => {
+        result.compoundprojs = uperiods.map((years) => {
             const totalMonths = years * 12;
-            const linearAccumulated = Math.max(0, netSavings) * totalMonths;
+            const linearAccumulated = Math.max(0, saving) * totalMonths;
 
-            let compoundedAccumulated = 0;
-            if (netSavings > 0) {
+            let accumulate = 0;
+            if (saving > 0) {
                 if (monthlyRate === 0) {
-                    compoundedAccumulated = linearAccumulated;
+                    accumulate = linearAccumulated;
                 } else {
 
-                    compoundedAccumulated = netSavings * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+                    accumulate = saving * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
                 }
             }
 
-            const yieldPremium = compoundedAccumulated - linearAccumulated;
+            const yieldPremium = accumulate - linearAccumulated;
 
             return {
                 years,
                 linear: linearAccumulated,
-                compounded: compoundedAccumulated,
+                compounded: accumulate,
                 premium: yieldPremium
             };
         });
 
         return result;
-    }, [computations, savingsGoal, compoundRate, forecastHorizon]);
+    }, [compute, savingsGoal, cr, hori]);
 
 
-    const circleProgressConfigs = useMemo(() => {
+    const progs = useMemo(() => {
         const radius = 28;
         const circumference = 2 * Math.PI * radius;
-        const clampedRate = Math.min(100, Math.max(0, computations.retentionRate));
-        const strokeDashoffset = circumference - (clampedRate / 100) * circumference;
+        const clamp = Math.min(100, Math.max(0, compute.retention));
+        const dashoff = circumference - (clamp / 100) * circumference;
 
         return {
             radius,
             circumference,
-            strokeDashoffset
+            dashoff
         };
-    }, [computations.retentionRate]);
+    }, [compute.retention]);
 
     return (
-        <main className='dashboard-shell'>
-            {/*main dashboard */}
-            <header className='dashboard-header'>
+        <main className='dash-shell'>
+            {/*main dash */}
+            <header className='dash-header'>
                 <div className='brand-section'>
                     <h1>Finance Tracker</h1>
-                    <p>Interactive financial ledger and savings planner</p>
+                    <p>Your Planner And Helper Of Finance</p>
                 </div>
 
                 <div className='goal-controller'>
-                    <span className='goal-label'>Target Savings</span>
+                    <span className='goal-label'>Saving Rate</span>
                     <div className='goal-input-wrapper'>
                         <span className='goal-currency-symbol'>$</span>
                         <input
@@ -317,93 +317,93 @@ export default function Income() {
                             aria-label='Target Savings Goal'
                         />
                     </div>
-                    <button className='btn-delete' onClick={() => adjustGoal(10000)}>$10k</button>
-                    <button className='btn-delete' onClick={() => adjustGoal(50000)}>50k</button>
+                    <button className='btn-delete' onClick={() => goaladj(10000)}>$10k</button>
+                    <button className='btn-delete' onClick={() => goaladj(50000)}>50k</button>
                 </div>
             </header>
 
-            <section className='metrics-grid' aria-label='Key Performance Indicators'>
+            <section className='metrss-grid' aria-label='Key Performance Indicators'>
 
-                <article className='metric-card inflow-card'>
-                    <div className='metric-header'>
-                        <span className='metric-title'>Gross Inflows</span>
+                <article className='metrs-card inflow-card'>
+                    <div className='metrs-header'>
+                        <span className='metrs-title'>Income Flow</span>
                     </div>
-                    <div className='metric-body'>
-                        <div className='metric-value-group'>
-                            <div className='metric-value'>{formatCurrency(computations.grossInflow)}</div>
-                            <span className='metric-subtext'>Total income</span>
+                    <div className='metrs-body'>
+                        <div className='metrs-value-group'>
+                            <div className='metrs-value'>{formatCurrency(compute.grossInflow)}</div>
+                            <span className='metrs-subtext'>Total income</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metric-card outflow'>
-                    <div className='metric-header'>
-                        <span className='metric-title'>Gross Outflows</span>
+                <article className='metrs-card outflow'>
+                    <div className='metrs-header'>
+                        <span className='metrs-title'>Outcome Flow</span>
                     </div>
-                    <div className='metric-body'>
-                        <div className='metric-value-group'>
-                            <div className='metric-value'>{formatCurrency(computations.grossOutflow)}</div>
-                            <span className='metric-subtext'>Total expenses</span>
+                    <div className='metrs-body'>
+                        <div className='metrs-value-group'>
+                            <div className='metrs-value'>{formatCurrency(compute.grossOutflow)}</div>
+                            <span className='metrs-subtext'>Total expenses</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metric-card net'>
-                    <div className='metric-header'>
-                        <span className='metric-title'>Net Savings</span>
+                <article className='metrs-card net'>
+                    <div className='metrs-header'>
+                        <span className='metrs-title'>Net Savings</span>
                     </div>
-                    <div className='metric-body'>
-                        <div className='metric-value-group'>
-                            <div className='metric-value'>
-                                {formatCurrency(computations.netSavings)}
+                    <div className='metrs-body'>
+                        <div className='metrs-value-group'>
+                            <div className='metrs-value'>
+                                {formatCurrency(compute.saving)}
                             </div>
-                            <span className='metric-subtext'>Net savings volume</span>
+                            <span className='metrs-subtext'>Net savings capacity</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metric-card retention-card'>
-                    <div className='metric-header'>
-                        <span className='metric-title'>Savings Rate</span>
+                <article className='metrs-card retention-card'>
+                    <div className='metrs-header'>
+                        <span className='metrs-title'>Savings Rate</span>
                     </div>
-                    <div className='metric-body'>
-                        <div className='metric-value-group'>
-                            <span className='metric-subtext'>Percentage of income saved</span>
+                    <div className='metrs-body'>
+                        <div className='metrs-value-group'>
+                            <span className='metrs-subtext'>Percent of amount saved</span>
                         </div>
 
-                        <div className='metric-vis-container'>
-                            <svg className='progress-circle-svg' viewBox='0 0 68 68'>
-                                <circle className='progress-circle-bg' cx="34" cy="34" r={circleProgressConfigs.radius} />
+                        <div className='metrs-vis-container'>
+                            <svg className='prog-circle-svg' viewBox='0 0 68 68'>
+                                <circle className='prog-circle-bg' cx="34" cy="34" r={progs.radius} />
                                 <circle
-                                    className='progress-circle-fill'
+                                    className='prog-circle-fill'
                                     cx='34'
                                     cy='34'
-                                    r={circleProgressConfigs.radius}
-                                    strokeDasharray={circleProgressConfigs.circumference}
-                                    strokeDashoffset={circleProgressConfigs.strokeDashoffset}
+                                    r={progs.radius}
+                                    strokeDasharray={progs.circumference}
+                                    dashoff={progs.dashoff}
                                 />
                             </svg>
-                            <div className='progress-circle-text'>
-                                {Math.max(0, Math.round(computations.retentionRate))}%
+                            <div className='prog-circle-text'>
+                                {Math.max(0, Math.round(compute.retention))}%
                             </div>
                         </div>
                     </div>
                 </article>
             </section>
 
-            <section className='dashboard-grid'>
+            <section className='dash-grid'>
 
-                <div className='ledger-container'>
+                <div className='leddg-container'>
 
-                    <section className='ledger-panel inflow-ledger' aria-label='Capital Inflow Ledger'>
-                        <header className='ledger-panel-header'>
-                            <div className='ledger-panel-title'>
+                    <section className='leddg-panel inflow-leddg' aria-label='Capital Inflow leddg'>
+                        <header className='leddg-panel-header'>
+                            <div className='leddg-panel-title'>
                                 <h2>Capital Inflows</h2>
-                                <span className='ledger-badge'>{inflows.length} Source{inflows.length !== 1 ? 's' : ''}</span>
+                                <span className='leddg-badge'>{inflows.length} Source{inflows.length !== 1 ? 's' : ''}</span>
                             </div>
                         </header>
 
-                        <form onSubmit={handleInflowSubmit} className={`ledger-form ${inflow ? 'shake-animation' : ''}`} aria-label="Add Inflow Transaction">
+                        <form onSubmit={inflowsubmit} className={`leddg-form ${infloww ? 'shake-animation' : ''}`} aria-label="Add Inflow incomeing value">
                             <div className='form-group'>
                                 <input
                                     type='text'
@@ -411,7 +411,7 @@ export default function Income() {
                                     placeholder='Inflow description...'
                                     className='form-field'
                                     value={inflowForm.description}
-                                    onChange={handleInflowChange}
+                                    onChange={inflow}
                                     aria-label='Inflow Description'
                                 />
                                 {inflowErrors.description && (
@@ -429,7 +429,7 @@ export default function Income() {
                                         className='form-field'
                                         step='0.01'
                                         value={inflowForm.amount}
-                                        onChange={handleInflowChange}
+                                        onChange={inflow}
                                         aria-label='Inflow Amount'
                                     />
                                 </div>
@@ -443,7 +443,7 @@ export default function Income() {
                                     name='tag'
                                     className='form-field'
                                     value={inflowForm.tag}
-                                    onChange={handleInflowChange}
+                                    onChange={inflow}
                                     aria-label='Inflow Classification Category'
                                 >
                                     <option value='Full-Time'>Full-Time</option>
@@ -458,14 +458,14 @@ export default function Income() {
                         </form>
 
 
-                        <div className='ledger-table-wrapper'>
-                            <table className='ledger-table'>
+                        <div className='leddg-table-wrapper'>
+                            <table className='leddg-table'>
                                 <thead>
                                     <tr>
                                         <th>Date</th>
                                         <th>Source</th>
                                         <th>Category</th>
-                                        <th>Gross Volume</th>
+                                        <th>Gross Income Rate</th>
                                         <th aria-label='Row Operations'></th>
                                     </tr>
                                 </thead>
@@ -475,7 +475,7 @@ export default function Income() {
                                             <td colSpan='5'>
                                                 <div className='table-empty-state'>
                                                     <span className='empty-state-icon'></span>
-                                                    <p>No income transactions added yet.</p>
+                                                    <p>No income transactions added</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -496,7 +496,7 @@ export default function Income() {
                                                 <td className='row-actions'>
                                                     <button
                                                         className='btn-delete'
-                                                        onClick={() => deleteInflow(item.id)}
+                                                        onClick={() => deletein(item.id)}
                                                         title='Remove Transaction Entry'
                                                         aria-label={`Delete ${item.description}`}
                                                     >Delete</button>
@@ -509,24 +509,24 @@ export default function Income() {
                         </div>
                     </section>
 
-                    <section className='ledger-panel outflow-ledger' aria-label='Capital Outflow Ledger'>
-                        <header className='ledger-panel-header'>
-                            <div className='ledger-panel-title'>
-                                <h2>Capital Outflows</h2>
-                                <span className='ledger-badge'>{outflows.length} Record{outflows.length !== 1 ? 's' : ''}</span>
+                    <section className='leddg-panel outflow-leddg' aria-label='Capital Outflow leddg'>
+                        <header className='leddg-panel-header'>
+                            <div className='leddg-panel-title'>
+                                <h2>Capital Outgoing</h2>
+                                <span className='leddg-badge'>{outflows.length} Record{outflows.length !== 1 ? 's' : ''}</span>
                             </div>
                         </header>
 
 
-                        <form onSubmit={handleOutflowSubmit} className={`ledger-form ${outflowShake ? 'shake-animation' : ''}`} aria-label='Add Outflow Transaction'>
+                        <form onSubmit={outflowsubmit} className={`leddg-form ${outflowShake ? 'shake-animation' : ''}`} aria-label='Add Outflow Transaction'>
                             <div className='form-group'>
                                 <input
                                     type='text'
                                     name='title'
-                                    placeholder='Outflow Description...'
+                                    placeholder='Outflow Description'
                                     className='form-field'
                                     value={outflowForm.title}
-                                    onChange={handleOutflowChange}
+                                    onChange={outflow}
                                     aria-label='Outflow Title'
                                 />
                                 {outflowErrors.title && (
@@ -544,7 +544,7 @@ export default function Income() {
                                         className='form-field'
                                         step='0.01'
                                         value={outflowForm.amount}
-                                        onChange={handleOutflowChange}
+                                        onChange={outflow}
                                         aria-label='Outflow Amount'
                                     />
 
@@ -559,8 +559,8 @@ export default function Income() {
                                     name='tag'
                                     className='form-field'
                                     value={outflowForm.tag}
-                                    onChange={handleOutflowChange}
-                                    aria-label='Outflow Category Allocation'
+                                    onChange={outflow}
+                                    aria-label='Outgoing category allocate'
                                 >
                                     <option value='Housing'>Housing</option>
                                     <option value='Food'>Food</option>
@@ -575,8 +575,8 @@ export default function Income() {
                             </button>
                         </form>
 
-                        <div className='ledger-table-wrapper'>
-                            <table className='ledger-table'>
+                        <div className='leddg-table-wrapper'>
+                            <table className='leddg-table'>
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -592,7 +592,7 @@ export default function Income() {
                                             <td colSpan="5">
                                                 <div className='table-empty-state'>
                                                     <span className='empty-state-icon'></span>
-                                                    <p>No expense transactions added yet.</p>
+                                                    <p>No expense transactions added</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -612,7 +612,7 @@ export default function Income() {
                                                 <td className='row-actions'>
                                                     <button
                                                         className='btn-delete'
-                                                        onClick={() => deleteOutflow(item.id)}
+                                                        onClick={() => deleteout(item.id)}
                                                         title='Remove transaction entry'
                                                         aria-label={`Delete ${item.title}`}
                                                     >Delete</button>
@@ -630,18 +630,18 @@ export default function Income() {
 
                     <section className='strategy-panel' aria-label='Strategy Advisor Panel'>
                         <h2 className='strategy-panel-title'>
-                            <span></span> Strategy Advisor
+                            <span></span> Strategy Point
                         </h2>
-                        <div className='advisor-banners-container'>
-                            {advisoryReports.map((report) => (
+                        <div className='advisor-container'>
+                            {report.map((report) => (
                                 <article
                                     key={report.id}
-                                    className={`insight-banner banner-${report.type}`}
+                                    className={`insight ${report.type}`}
                                 >
-                                    <span className='insight-banner-icon'>{report.icon}</span>
-                                    <div className='insight-banner-content'>
-                                        <h3 className='insight-banner-title'>{report.title}</h3>
-                                        <p className='insight-banner-desc'>{report.desc}</p>
+                                    <span className='insight-icon'>{report.icon}</span>
+                                    <div className='insight-content'>
+                                        <h3 className='insight-title'>{report.title}</h3>
+                                        <p className='insight-desc'>{report.desc}</p>
                                     </div>
                                 </article>
                             ))}
@@ -649,34 +649,34 @@ export default function Income() {
                     </section>
 
 
-                    <section className='strategy-panel' aria-label='Expense Distribution Analysis'>
+                    <section className='strategy-panel' aria-label='Expense Distri Analysis'>
                         <h2 className='strategy-panel-title'>
                             <span></span>Expense Distribution
                         </h2>
-                        <div className='expense-distribution-list'>
-                            {Object.entries(computations.expenseReduction).map(([category, amount]) => {
-                                const totalOutflow = computations.grossOutflow;
+                        <div className='expense-distri-list'>
+                            {Object.entries(compute.expenseReduction).map(([category, amount]) => {
+                                const totalOutflow = compute.grossOutflow;
                                 const percentage = totalOutflow > 0 ? (amount / totalOutflow) * 100 : 0;
 
                                 return (
-                                    <div key={category} className='distribution-row'>
-                                        <div className='distribution-meta'>
-                                            <span className='distribution-label'>
-                                                <span className={`distribution-indicator-dot indicator-${category.toLowerCase()}`} />
+                                    <div key={category} className='distri-row'>
+                                        <div className='distri-meta'>
+                                            <span className='distri-label'>
+                                                <span className={`distri-indicator-dot indicator-${category.toLowerCase()}`} />
                                                 {category}
                                             </span>
-                                            <span className='distribution-values'>
+                                            <span className='distri-values'>
                                                 {formatCurrency(amount)}
-                                                <span className='distribution-percent'>
+                                                <span className='distri-percent'>
                                                     ({percentage.toFixed(1)}%)
                                                 </span>
                                             </span>
                                         </div>
-                                        <div className='tracking-bar-bg'>
+                                        <div className='track-bar-bg'>
                                             <div
-                                                className={`tracking-bar-fill bar-${category.toLowerCase()}`}
+                                                className={`track-bar-fill bar-${category.toLowerCase()}`}
                                                 style={{ width: `${percentage}` }}
-                                                role='progressbar'
+                                                role='progbar'
                                                 aria-valuenow={percentage}
                                                 aria-valuemin="0"
                                                 aria-valuemax="100"
@@ -688,81 +688,81 @@ export default function Income() {
                         </div>
                     </section>
 
-                    <section className='strategy-panel' aria-label="Predictive Compounding Projections Simulator">
+                    <section className='strategy-panel' aria-label="Prediction Unit">
                         <h2 className='strategy-panel-title'>
-                            <span></span>Compound Savings Runway
+                            <span></span>Compound Savings 
                         </h2>
 
-                        <div className='simulator-panel'>
+                        <div className='sim-panel'>
 
-                            <div className='simulator-slider-group'>
-                                <div className='slider-header'>
-                                    <span>Expected Investment Yield (APY)</span>
-                                    <span className='slider-value'>{compoundRate}%</span>
+                            <div className='sim-slide'>
+                                <div className='slide-head'>
+                                    <span>Yield (APY)</span>
+                                    <span className='slide-val'>{cr}%</span>
                                 </div>
                                 <input
                                     type='range'
                                     min='0'
                                     max='15'
                                     step='0.5'
-                                    className='simulator-range-input'
-                                    value={compoundRate}
-                                    onChange={(e) => setCompoundRate(parseFloat(e.target.value))}
+                                    className='sim-range'
+                                    value={cr}
+                                    onChange={(e) => setcr(parseFloat(e.target.value))}
                                     aria-label='Expected Investment Yield APY'
                                 />
                             </div>
 
 
-                            <div className='simulator-slider-group'>
-                                <div className='slider-header'>
-                                    <span>Forecast Projection Horizon</span>
-                                    <span className='slider-value'>{forecastHorizon} Years</span>
+                            <div className='sim-slide'>
+                                <div className='slide-head'>
+                                    <span>Cast</span>
+                                    <span className='slide-val'>{hori} Years</span>
                                 </div>
                                 <input
                                     type='range'
                                     min='1'
                                     max='20'
                                     step='1'
-                                    className='simulator-range-input'
-                                    value={forecastHorizon}
-                                    onChange={(e) => setForecastHorizon(parseInt(e.target.value))}
-                                    aria-label='Forecast Projection Horizon Years'
+                                    className='sim-range'
+                                    value={hori}
+                                    onChange={(e) => sethori(parseInt(e.target.value))}
+                                    aria-label='Cast Years'
                                 />
                             </div>
 
-                            {runwayAnalysis.isUnreachable ? (
-                                <div className="forecast-result-card unreachable">
-                                    <h3 className="forecast-result-title">Uh-Oh, Cash Alert!</h3>
-                                    <p className="forecast-result-text">
-                                        You are spending <span className="forecast-highlight">way more</span> than you make. You gotta cut down on spending so your money can actually grow!
+                            {analysiss.isUnreachable ? (
+                                <div className="cast-card unreachable">
+                                    <h3 className="cast-title">Uh-Oh Alert G</h3>
+                                    <p className="cast-text">
+                                        You are spending <span className="cast-high">way more</span> than you make. You gotta cut down on spending so your money grows G
                                     </p>
                                 </div>
                             ) : (
-                                <div className="forecast-result-card">
-                                    <h3 className="forecast-result-title">Goal Target Forecast</h3>
-                                    <p className="forecast-result-text">
-                                        At your current monthly savings rate of {formatCurrency(computations.netSavings)}, you will achieve your target of {formatCurrency(savingsGoal)} in{' '}
-                                        <span className="forecast-highlight">
-                                            {runwayAnalysis.monthsToGoal.toFixed(1)} months
+                                <div className="cast-card">
+                                    <h3 className="cast-title">Goal Target</h3>
+                                    <p className="cast-text">
+                                        At this monthly saving G {formatCurrency(compute.saving)} you will achieve your target {formatCurrency(savingsGoal)} in{' '}
+                                        <span className="cast-high">
+                                            {analysiss.monthsToGoal.toFixed(1)} months
                                         </span>{' '}
-                                        ({(runwayAnalysis.monthsToGoal / 12).toFixed(1)} years) under linear growth.
+                                        ({(analysiss.monthsToGoal / 12).toFixed(1)} years) under growth.
                                     </p>
                                 </div>
                             )}
 
-                            {!runwayAnalysis.isUnreachable && (
-                                <div className='projection-table-wrapper'>
-                                    <table className='projection-table'>
+                            {!analysiss.isUnreachable && (
+                                <div className='proj-table-wrapper'>
+                                    <table className='proj-table'>
                                         <thead>
                                             <tr>
                                                 <th>Horizon</th>
-                                                <th>Linear Savings</th>
+                                                <th>Savings</th>
                                                 <th>Compound Yield</th>
                                                 <th>Compound Premium</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {runwayAnalysis.compoundProjections.map((proj) => (
+                                            {analysiss.compoundprojs.map((proj) => (
                                                 <tr key={proj.years}>
                                                     <td>Yr {proj.years}</td>
                                                     <td>{formatCurrency(proj.linear)}</td>
