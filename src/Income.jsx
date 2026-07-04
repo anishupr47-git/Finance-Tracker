@@ -302,11 +302,11 @@ export default function Income() {
             <header className='dash-header'>
                 <div className='brand-section'>
                     <h1>Finance Tracker</h1>
-                    <p>Your Planner And Helper Of Finance</p>
+                    <p>Interactive financial ledger and savings planner</p>
                 </div>
 
                 <div className='goal-controller'>
-                    <span className='goal-label'>Saving Rate</span>
+                    <span className='goal-label'>Target Savings</span>
                     <div className='goal-input-wrapper'>
                         <span className='goal-currency-symbol'>$</span>
                         <input
@@ -322,68 +322,68 @@ export default function Income() {
                 </div>
             </header>
 
-            <section className='metrss-grid' aria-label='Key Performance Indicators'>
+            <section className='metrs-grid' aria-label='Key Performance Indicators'>
 
-                <article className='metrs-card inflow-card'>
+                <article className='metr-card inflow-card'>
                     <div className='metrs-header'>
-                        <span className='metrs-title'>Income Flow</span>
+                        <span className='metr-title'>Gross Inflows</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <div className='metrs-value'>{formatCurrency(compute.grossInflow)}</div>
-                            <span className='metrs-subtext'>Total income</span>
+                            <div className='metr-value'>{formatCurrency(compute.grossInflow)}</div>
+                            <span className='metr-subtext'>Total income</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metrs-card outflow'>
+                <article className='metr-card outflow'>
                     <div className='metrs-header'>
-                        <span className='metrs-title'>Outcome Flow</span>
+                        <span className='metr-title'>Gross Outflows</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <div className='metrs-value'>{formatCurrency(compute.grossOutflow)}</div>
-                            <span className='metrs-subtext'>Total expenses</span>
+                            <div className='metr-value'>{formatCurrency(compute.grossOutflow)}</div>
+                            <span className='metr-subtext'>Total expenses</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metrs-card net'>
+                <article className='metr-card net'>
                     <div className='metrs-header'>
-                        <span className='metrs-title'>Net Savings</span>
+                        <span className='metr-title'>Net Savings</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <div className='metrs-value'>
+                            <div className='metr-value'>
                                 {formatCurrency(compute.saving)}
                             </div>
-                            <span className='metrs-subtext'>Net savings capacity</span>
+                            <span className='metr-subtext'>Net savings volume</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metrs-card retention-card'>
+                <article className='metr-card retention-card'>
                     <div className='metrs-header'>
-                        <span className='metrs-title'>Savings Rate</span>
+                        <span className='metr-title'>Savings Rate</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <span className='metrs-subtext'>Percent of amount saved</span>
+                            <span className='metr-subtext'>Percentage of income saved</span>
                         </div>
 
-                        <div className='metrs-vis-container'>
-                            <svg className='prog-circle-svg' viewBox='0 0 68 68'>
-                                <circle className='prog-circle-bg' cx="34" cy="34" r={progs.radius} />
+                        <div className='metr-vis-container'>
+                            <svg className='prog-svg' viewBox='0 0 68 68'>
+                                <circle className='prog-bg' cx="34" cy="34" r={progs.radius} />
                                 <circle
-                                    className='prog-circle-fill'
+                                    className='prog-fill'
                                     cx='34'
                                     cy='34'
                                     r={progs.radius}
                                     strokeDasharray={progs.circumference}
-                                    dashoff={progs.dashoff}
+                                    strokeDashoffset={progs.dashoff}
                                 />
                             </svg>
-                            <div className='prog-circle-text'>
+                            <div className='prog-text'>
                                 {Math.max(0, Math.round(compute.retention))}%
                             </div>
                         </div>
@@ -393,17 +393,17 @@ export default function Income() {
 
             <section className='dash-grid'>
 
-                <div className='leddg-container'>
+                <div className='led-container'>
 
-                    <section className='leddg-panel inflow-leddg' aria-label='Capital Inflow leddg'>
-                        <header className='leddg-panel-header'>
-                            <div className='leddg-panel-title'>
+                    <section className='led-panel inflow-leddg' aria-label='Capital Inflow leddg'>
+                        <header className='led-panel-header'>
+                            <div className='led-panel-title'>
                                 <h2>Capital Inflows</h2>
-                                <span className='leddg-badge'>{inflows.length} Source{inflows.length !== 1 ? 's' : ''}</span>
+                                <span className='led-badge'>{inflows.length} Source{inflows.length !== 1 ? 's' : ''}</span>
                             </div>
                         </header>
 
-                        <form onSubmit={inflowsubmit} className={`leddg-form ${infloww ? 'shake-animation' : ''}`} aria-label="Add Inflow incomeing value">
+                        <form onSubmit={inflowsubmit} className={`led-form ${infloww ? 'shake-animation' : ''}`} aria-label="Add Inflow incomeing value">
                             <div className='form-group'>
                                 <input
                                     type='text'
@@ -447,7 +447,7 @@ export default function Income() {
                                     aria-label='Inflow Classification Category'
                                 >
                                     <option value='Full-Time'>Full-Time</option>
-                                    <option value='Side Hustle'>Side Hustle</option>
+                                    <option value='Side Hustle'>Side Hust Hustle</option>
                                     <option value='Investments'>Investments</option>
                                 </select>
                             </div>
@@ -509,16 +509,16 @@ export default function Income() {
                         </div>
                     </section>
 
-                    <section className='leddg-panel outflow-leddg' aria-label='Capital Outflow leddg'>
-                        <header className='leddg-panel-header'>
-                            <div className='leddg-panel-title'>
+                    <section className='led-panel outflow-leddg' aria-label='Capital Outflow leddg'>
+                        <header className='led-panel-header'>
+                            <div className='led-panel-title'>
                                 <h2>Capital Outgoing</h2>
-                                <span className='leddg-badge'>{outflows.length} Record{outflows.length !== 1 ? 's' : ''}</span>
+                                <span className='led-badge'>{outflows.length} Record{outflows.length !== 1 ? 's' : ''}</span>
                             </div>
                         </header>
 
 
-                        <form onSubmit={outflowsubmit} className={`leddg-form ${outflowShake ? 'shake-animation' : ''}`} aria-label='Add Outflow Transaction'>
+                        <form onSubmit={outflowsubmit} className={`led-form ${outflowShake ? 'shake-animation' : ''}`} aria-label='Add Outflow Transaction'>
                             <div className='form-group'>
                                 <input
                                     type='text'
@@ -630,18 +630,17 @@ export default function Income() {
 
                     <section className='strategy-panel' aria-label='Strategy Advisor Panel'>
                         <h2 className='strategy-panel-title'>
-                            <span></span> Strategy Point
+                            <span></span> Strategy Advisor
                         </h2>
-                        <div className='advisor-container'>
+                        <div className='advisor-banners-container'>
                             {report.map((report) => (
                                 <article
                                     key={report.id}
-                                    className={`insight ${report.type}`}
+                                    className={`insight-banner banner-${report.type}`}
                                 >
-                                    <span className='insight-icon'>{report.icon}</span>
-                                    <div className='insight-content'>
-                                        <h3 className='insight-title'>{report.title}</h3>
-                                        <p className='insight-desc'>{report.desc}</p>
+                                    <div className='insight-banner-content'>
+                                        <h3 className='insight-banner-title'>{report.title}</h3>
+                                        <p className='insight-banner-desc'>{report.desc}</p>
                                     </div>
                                 </article>
                             ))}
@@ -690,22 +689,22 @@ export default function Income() {
 
                     <section className='strategy-panel' aria-label="Prediction Unit">
                         <h2 className='strategy-panel-title'>
-                            <span></span>Compound Savings 
+                            <span></span>Compound Savings Runway
                         </h2>
 
                         <div className='sim-panel'>
 
-                            <div className='sim-slide'>
-                                <div className='slide-head'>
-                                    <span>Yield (APY)</span>
-                                    <span className='slide-val'>{cr}%</span>
+                            <div className='sim-slide-group'>
+                                <div className='slide-header'>
+                                    <span>Expected Investment Yield (APY)</span>
+                                    <span className='slide-value'>{cr}%</span>
                                 </div>
                                 <input
                                     type='range'
                                     min='0'
                                     max='15'
                                     step='0.5'
-                                    className='sim-range'
+                                    className='sim-range-input'
                                     value={cr}
                                     onChange={(e) => setcr(parseFloat(e.target.value))}
                                     aria-label='Expected Investment Yield APY'
@@ -713,17 +712,17 @@ export default function Income() {
                             </div>
 
 
-                            <div className='sim-slide'>
-                                <div className='slide-head'>
-                                    <span>Cast</span>
-                                    <span className='slide-val'>{hori} Years</span>
+                            <div className='sim-slide-group'>
+                                <div className='slide-header'>
+                                    <span>Forecast Projection Horizon</span>
+                                    <span className='slide-value'>{hori} Years</span>
                                 </div>
                                 <input
                                     type='range'
                                     min='1'
                                     max='20'
                                     step='1'
-                                    className='sim-range'
+                                    className='sim-range-input'
                                     value={hori}
                                     onChange={(e) => sethori(parseInt(e.target.value))}
                                     aria-label='Cast Years'
@@ -731,21 +730,21 @@ export default function Income() {
                             </div>
 
                             {analysiss.isUnreachable ? (
-                                <div className="cast-card unreachable">
-                                    <h3 className="cast-title">Uh-Oh Alert G</h3>
-                                    <p className="cast-text">
-                                        You are spending <span className="cast-high">way more</span> than you make. You gotta cut down on spending so your money grows G
+                                <div className="forecast-result-card unreachable">
+                                    <h3 className="forecast-result-title">Uh-Oh, Cash Alert!</h3>
+                                    <p className="forecast-result-text">
+                                        You are spending <span className="forecast-highlight">way more</span> than you make. You gotta cut down on spending so your money can actually grow!
                                     </p>
                                 </div>
                             ) : (
-                                <div className="cast-card">
-                                    <h3 className="cast-title">Goal Target</h3>
-                                    <p className="cast-text">
-                                        At this monthly saving G {formatCurrency(compute.saving)} you will achieve your target {formatCurrency(savingsGoal)} in{' '}
-                                        <span className="cast-high">
+                                <div className="forecast-result-card">
+                                    <h3 className="forecast-result-title">Goal Target Forecast</h3>
+                                    <p className="forecast-result-text">
+                                        At your current monthly savings rate of {formatCurrency(compute.saving)}, you will achieve your target of {formatCurrency(savingsGoal)} in{' '}
+                                        <span className="forecast-highlight">
                                             {analysiss.monthsToGoal.toFixed(1)} months
                                         </span>{' '}
-                                        ({(analysiss.monthsToGoal / 12).toFixed(1)} years) under growth.
+                                        ({(analysiss.monthsToGoal / 12).toFixed(1)} years) under linear growth.
                                     </p>
                                 </div>
                             )}
@@ -756,7 +755,7 @@ export default function Income() {
                                         <thead>
                                             <tr>
                                                 <th>Horizon</th>
-                                                <th>Savings</th>
+                                                <th>Linear Savings</th>
                                                 <th>Compound Yield</th>
                                                 <th>Compound Premium</th>
                                             </tr>
