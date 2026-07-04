@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import './Income.css';
 
-const INTIAL_INFLOWS = [];
+const INTIAL_inflowwS = [];
 
 const INTIAL_OUTFLOWS = [];
 
@@ -9,14 +9,14 @@ const DEFAULT_SAVINGS_GOAL = 0;
 
 export default function Income() {
     //main app
-    const [inflows, setInflows] = useState(INTIAL_INFLOWS);
+    const [inflowws, setinflowws] = useState(INTIAL_inflowwS);
     const [outflows, setOutflows] = useState(INTIAL_OUTFLOWS);
     const [savingsGoal, setSavingsGoal] = useState(DEFAULT_SAVINGS_GOAL);
 
     //income
-    const [inflowForm, setInflowForm] = useState({ description: '', amount: '', tag: 'Full-Time' });
-    const [inflowErrors, setInflowErrors] = useState({ description: '', amount: '' });
-    const [infloww, setInflowShake] = useState(false);
+    const [inflowwForm, setinflowwForm] = useState({ description: '', amount: '', tag: 'Full-Time' });
+    const [inflowwErrors, setinflowwErrors] = useState({ description: '', amount: '' });
+    const [infloww, setinflowwShake] = useState(false);
 
    //expense
     const [outflowForm, setOutflowForm] = useState({ title: '', amount: '', tag: 'Housing' });
@@ -37,11 +37,11 @@ export default function Income() {
     }, []);
 
 
-    const inflow = (e) => {
+    const infloww = (e) => {
         const { name, value } = e.target;
-        setInflowForm((prev) => ({ ...prev, [name]: value }));
-        if (inflowErrors[name]) {
-            setInflowErrors((prev) => ({ ...prev, [name]: '' }));
+        setinflowwForm((prev) => ({ ...prev, [name]: value }));
+        if (inflowwErrors[name]) {
+            setinflowwErrors((prev) => ({ ...prev, [name]: '' }));
         }
     };
 
@@ -53,37 +53,37 @@ export default function Income() {
         }
     };
 
-    const inflowsubmit = (e) => {
+    const inflowwsubmit = (e) => {
         e.preventDefault();
-        const description = inflowForm.description.trim();
-        const amount = parseFloat(inflowForm.amount);
+        const description = inflowwForm.description.trim();
+        const amount = parseFloat(inflowwForm.amount);
 
         //validate
         if (!description) {
-            setInflowErrors({ description: 'Description cant be blank', amount: '' });
-            setInflowShake(true);
-            setTimeout(() => setInflowShake(false), 500);
+            setinflowwErrors({ description: 'Description cant be blank', amount: '' });
+            setinflowwShake(true);
+            setTimeout(() => setinflowwShake(false), 500);
             return;
         }
 
         if (isNaN(amount) || amount <= 0) {
-            setInflowErrors({ description: '', amount: 'Amount must be +ve' });
-            setInflowShake(true);
-            setTimeout(() => setInflowShake(false), 500);
+            setinflowwErrors({ description: '', amount: 'Amount must be +ve' });
+            setinflowwShake(true);
+            setTimeout(() => setinflowwShake(false), 500);
             return;
         }
 
-        const newInflow = {
+        const newinfloww = {
             id: crypto.randomUUID(),
             description: description,
             amount: amount,
-            tag: inflowForm.tag,
+            tag: inflowwForm.tag,
             date: new Date().toISOString().split('T')[0]
         };
 
-        setInflows((prev) => [newInflow, ...prev]);
-        setInflowForm({ description: '', amount: '', tag: 'Full-Time' });
-        setInflowErrors({ description: '', amount: '' });
+        setinflowws((prev) => [newinfloww, ...prev]);
+        setinflowwForm({ description: '', amount: '', tag: 'Full-Time' });
+        setinflowwErrors({ description: '', amount: '' });
     };
 
     const outflowsubmit = (e) => {
@@ -120,7 +120,7 @@ export default function Income() {
     };
 
     const deletein = (id) => {
-        setInflows((prev) => prev.filter((item) => item.id !== id));
+        setinflowws((prev) => prev.filter((item) => item.id !== id));
     };
     const deleteout = (id) => {
         setOutflows((prev) => prev.filter((item) => item.id !== id));
@@ -132,10 +132,10 @@ export default function Income() {
 
     //calculations
     const compute = useMemo(() => {
-        const grossInflow = inflows.reduce((sum, item) => sum + item.amount, 0);
+        const grossinfloww = inflowws.reduce((sum, item) => sum + item.amount, 0);
         const grossOutflow = outflows.reduce((sum, item) => sum + item.amount, 0);
-        const saving = grossInflow - grossOutflow;
-        const retention = grossInflow > 0 ? (saving / grossInflow) * 100 : 0;
+        const saving = grossinfloww - grossOutflow;
+        const retention = grossinfloww > 0 ? (saving / grossinfloww) * 100 : 0;
         
         let expenseReduction = {
             Housing: 0,
@@ -154,20 +154,20 @@ export default function Income() {
         }
 
         return {
-            grossInflow,
+            grossinfloww,
             grossOutflow,
             saving,
             retention,
             expenseReduction
         };
-    }, [inflows, outflows]);
+    }, [inflowws, outflows]);
 
 
     const report = useMemo(() => {
-        const { grossInflow, saving, retention, expenseReduction } = compute;
+        const { grossinfloww, saving, retention, expenseReduction } = compute;
         const reports = [];
 
-        if (grossInflow === 0) {
+        if (grossinfloww === 0) {
             return [{
                 id: 'no-income',
                 type: 'danger',
@@ -177,7 +177,7 @@ export default function Income() {
             }];
         }
 
-        const housing = (expenseReduction['Housing'] / grossInflow) * 100;
+        const housing = (expenseReduction['Housing'] / grossinfloww) * 100;
         if (housing > 40) {
             reports.push({
                 id: 'overhead-stress',
@@ -188,7 +188,7 @@ export default function Income() {
             });
         }
 
-        const entertain = (expenseReduction['Entertainment'] / grossInflow) * 100;
+        const entertain = (expenseReduction['Entertainment'] / grossinfloww) * 100;
         if (entertain > 15) {
             reports.push({
                 id: 'discretionary-leak',
@@ -302,11 +302,11 @@ export default function Income() {
             <header className='dash-header'>
                 <div className='brand-section'>
                     <h1>Finance Tracker</h1>
-                    <p>Interactive financial ledger and savings planner</p>
+                    <p>Your Planner And Helper Of Finance</p>
                 </div>
 
                 <div className='goal-controller'>
-                    <span className='goal-label'>Target Savings</span>
+                    <span className='goal-label'>Saving Rate</span>
                     <div className='goal-input-wrapper'>
                         <span className='goal-currency-symbol'>$</span>
                         <input
@@ -322,68 +322,68 @@ export default function Income() {
                 </div>
             </header>
 
-            <section className='metrs-grid' aria-label='Key Performance Indicators'>
+            <section className='metrss-grid' aria-label='Key Performance Shower'>
 
-                <article className='metr-card inflow-card'>
+                <article className='metrs-card infloww-card'>
                     <div className='metrs-header'>
-                        <span className='metr-title'>Gross Inflows</span>
+                        <span className='metrs-title'>Income Flow</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <div className='metr-value'>{formatCurrency(compute.grossInflow)}</div>
-                            <span className='metr-subtext'>Total income</span>
+                            <div className='metrs-value'>{formatCurrency(compute.grossinfloww)}</div>
+                            <span className='metrs-subtext'>Total income</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metr-card outflow'>
+                <article className='metrs-card outflow'>
                     <div className='metrs-header'>
-                        <span className='metr-title'>Gross Outflows</span>
+                        <span className='metrs-title'>Outcome Flow</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <div className='metr-value'>{formatCurrency(compute.grossOutflow)}</div>
-                            <span className='metr-subtext'>Total expenses</span>
+                            <div className='metrs-value'>{formatCurrency(compute.grossOutflow)}</div>
+                            <span className='metrs-subtext'>Total expenses</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metr-card net'>
+                <article className='metrs-card net'>
                     <div className='metrs-header'>
-                        <span className='metr-title'>Net Savings</span>
+                        <span className='metrs-title'>Net Savings</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <div className='metr-value'>
+                            <div className='metrs-value'>
                                 {formatCurrency(compute.saving)}
                             </div>
-                            <span className='metr-subtext'>Net savings volume</span>
+                            <span className='metrs-subtext'>Net savings capacity</span>
                         </div>
                     </div>
                 </article>
 
-                <article className='metr-card retention-card'>
+                <article className='metrs-card retention-card'>
                     <div className='metrs-header'>
-                        <span className='metr-title'>Savings Rate</span>
+                        <span className='metrs-title'>Savings Rate</span>
                     </div>
                     <div className='metrs-body'>
                         <div className='metrs-value-group'>
-                            <span className='metr-subtext'>Percentage of income saved</span>
+                            <span className='metrs-subtext'>Percent of amount saved</span>
                         </div>
 
-                        <div className='metr-vis-container'>
-                            <svg className='prog-svg' viewBox='0 0 68 68'>
-                                <circle className='prog-bg' cx="34" cy="34" r={progs.radius} />
+                        <div className='metrs-vis-container'>
+                            <svg className='prog-circle-svg' viewBox='0 0 68 68'>
+                                <circle className='prog-circle-bg' cx="34" cy="34" r={progs.radius} />
                                 <circle
-                                    className='prog-fill'
+                                    className='prog-circle-fill'
                                     cx='34'
                                     cy='34'
                                     r={progs.radius}
                                     strokeDasharray={progs.circumference}
-                                    strokeDashoffset={progs.dashoff}
+                                    dashoff={progs.dashoff}
                                 />
                             </svg>
-                            <div className='prog-text'>
+                            <div className='prog-circle-text'>
                                 {Math.max(0, Math.round(compute.retention))}%
                             </div>
                         </div>
@@ -393,29 +393,29 @@ export default function Income() {
 
             <section className='dash-grid'>
 
-                <div className='led-container'>
+                <div className='leddg-container'>
 
-                    <section className='led-panel inflow-leddg' aria-label='Capital Inflow leddg'>
-                        <header className='led-panel-header'>
-                            <div className='led-panel-title'>
-                                <h2>Capital Inflows</h2>
-                                <span className='led-badge'>{inflows.length} Source{inflows.length !== 1 ? 's' : ''}</span>
+                    <section className='leddg-panel infloww-leddg' aria-label='Capital infloww leddg'>
+                        <header className='leddg-panel-header'>
+                            <div className='leddg-panel-title'>
+                                <h2>Capital inflowws</h2>
+                                <span className='leddg-badge'>{inflowws.length} Source{inflowws.length !== 1 ? 's' : ''}</span>
                             </div>
                         </header>
 
-                        <form onSubmit={inflowsubmit} className={`led-form ${infloww ? 'shake-animation' : ''}`} aria-label="Add Inflow incomeing value">
+                        <form onSubmit={inflowwsubmit} className={`leddg-form ${infloww ? 'shake-animation' : ''}`} aria-label="Add infloww incomeing value">
                             <div className='form-group'>
                                 <input
                                     type='text'
                                     name='description'
-                                    placeholder='Inflow description...'
+                                    placeholder='infloww description...'
                                     className='form-field'
-                                    value={inflowForm.description}
-                                    onChange={inflow}
-                                    aria-label='Inflow Description'
+                                    value={inflowwForm.description}
+                                    onChange={infloww}
+                                    aria-label='infloww Description'
                                 />
-                                {inflowErrors.description && (
-                                    <span className='form-error-msg'>{inflowErrors.description}</span>
+                                {inflowwErrors.description && (
+                                    <span className='form-error-msg'>{inflowwErrors.description}</span>
                                 )}
                             </div>
 
@@ -428,13 +428,13 @@ export default function Income() {
                                         placeholder='Amount'
                                         className='form-field'
                                         step='0.01'
-                                        value={inflowForm.amount}
-                                        onChange={inflow}
-                                        aria-label='Inflow Amount'
+                                        value={inflowwForm.amount}
+                                        onChange={infloww}
+                                        aria-label='infloww Amount'
                                     />
                                 </div>
-                                {inflowErrors.amount && (
-                                    <span className='form-error-msg'>{inflowErrors.amount}</span>
+                                {inflowwErrors.amount && (
+                                    <span className='form-error-msg'>{inflowwErrors.amount}</span>
                                 )}
                             </div>
 
@@ -442,12 +442,12 @@ export default function Income() {
                                 <select
                                     name='tag'
                                     className='form-field'
-                                    value={inflowForm.tag}
-                                    onChange={inflow}
-                                    aria-label='Inflow Classification Category'
+                                    value={inflowwForm.tag}
+                                    onChange={infloww}
+                                    aria-label='infloww Classification Category'
                                 >
                                     <option value='Full-Time'>Full-Time</option>
-                                    <option value='Side Hustle'>Side Hust Hustle</option>
+                                    <option value='Side Hustle'>Side Hustle</option>
                                     <option value='Investments'>Investments</option>
                                 </select>
                             </div>
@@ -470,7 +470,7 @@ export default function Income() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {inflows.length === 0 ? (
+                                    {inflowws.length === 0 ? (
                                         <tr>
                                             <td colSpan='5'>
                                                 <div className='table-empty-state'>
@@ -481,7 +481,7 @@ export default function Income() {
                                         </tr>
 
                                     ) : (
-                                        inflows.map((item) => (
+                                        inflowws.map((item) => (
                                             <tr key={item.id}>
                                                 <td>{item.date}</td>
                                                 <td className='row-desc'>{item.description}</td>
@@ -509,16 +509,16 @@ export default function Income() {
                         </div>
                     </section>
 
-                    <section className='led-panel outflow-leddg' aria-label='Capital Outflow leddg'>
-                        <header className='led-panel-header'>
-                            <div className='led-panel-title'>
+                    <section className='leddg-panel outflow-leddg' aria-label='Capital Outflow leddg'>
+                        <header className='leddg-panel-header'>
+                            <div className='leddg-panel-title'>
                                 <h2>Capital Outgoing</h2>
-                                <span className='led-badge'>{outflows.length} Record{outflows.length !== 1 ? 's' : ''}</span>
+                                <span className='leddg-badge'>{outflows.length} Record{outflows.length !== 1 ? 's' : ''}</span>
                             </div>
                         </header>
 
 
-                        <form onSubmit={outflowsubmit} className={`led-form ${outflowShake ? 'shake-animation' : ''}`} aria-label='Add Outflow Transaction'>
+                        <form onSubmit={outflowsubmit} className={`leddg-form ${outflowShake ? 'shake-animation' : ''}`} aria-label='Add Outflow Transaction'>
                             <div className='form-group'>
                                 <input
                                     type='text'
@@ -628,19 +628,20 @@ export default function Income() {
 
                 <aside className='strategy-column'>
 
-                    <section className='strategy-panel' aria-label='Strategy Advisor Panel'>
+                    <section className='strategy-panel' aria-label='Strategy Advisor Area'>
                         <h2 className='strategy-panel-title'>
-                            <span></span> Strategy Advisor
+                            <span></span> Strategy Point
                         </h2>
-                        <div className='advisor-banners-container'>
+                        <div className='advisor-container'>
                             {report.map((report) => (
                                 <article
                                     key={report.id}
-                                    className={`insight-banner banner-${report.type}`}
+                                    className={`insight ${report.type}`}
                                 >
-                                    <div className='insight-banner-content'>
-                                        <h3 className='insight-banner-title'>{report.title}</h3>
-                                        <p className='insight-banner-desc'>{report.desc}</p>
+                                    <span className='insight-icon'>{report.icon}</span>
+                                    <div className='insight-content'>
+                                        <h3 className='insight-title'>{report.title}</h3>
+                                        <p className='insight-desc'>{report.desc}</p>
                                     </div>
                                 </article>
                             ))}
@@ -648,7 +649,7 @@ export default function Income() {
                     </section>
 
 
-                    <section className='strategy-panel' aria-label='Expense Distri Analysis'>
+                    <section className='strategy-panel' aria-label='Expense Distri Check'>
                         <h2 className='strategy-panel-title'>
                             <span></span>Expense Distribution
                         </h2>
@@ -689,22 +690,22 @@ export default function Income() {
 
                     <section className='strategy-panel' aria-label="Prediction Unit">
                         <h2 className='strategy-panel-title'>
-                            <span></span>Compound Savings Runway
+                            <span></span>Compound Savings 
                         </h2>
 
                         <div className='sim-panel'>
 
-                            <div className='sim-slide-group'>
-                                <div className='slide-header'>
-                                    <span>Expected Investment Yield (APY)</span>
-                                    <span className='slide-value'>{cr}%</span>
+                            <div className='sim-slide'>
+                                <div className='slide-head'>
+                                    <span>Yield (APY)</span>
+                                    <span className='slide-val'>{cr}%</span>
                                 </div>
                                 <input
                                     type='range'
                                     min='0'
                                     max='15'
                                     step='0.5'
-                                    className='sim-range-input'
+                                    className='sim-range'
                                     value={cr}
                                     onChange={(e) => setcr(parseFloat(e.target.value))}
                                     aria-label='Expected Investment Yield APY'
@@ -712,17 +713,17 @@ export default function Income() {
                             </div>
 
 
-                            <div className='sim-slide-group'>
-                                <div className='slide-header'>
-                                    <span>Forecast Projection Horizon</span>
-                                    <span className='slide-value'>{hori} Years</span>
+                            <div className='sim-slide'>
+                                <div className='slide-head'>
+                                    <span>Cast</span>
+                                    <span className='slide-val'>{hori} Years</span>
                                 </div>
                                 <input
                                     type='range'
                                     min='1'
                                     max='20'
                                     step='1'
-                                    className='sim-range-input'
+                                    className='sim-range'
                                     value={hori}
                                     onChange={(e) => sethori(parseInt(e.target.value))}
                                     aria-label='Cast Years'
@@ -730,21 +731,21 @@ export default function Income() {
                             </div>
 
                             {analysiss.isUnreachable ? (
-                                <div className="forecast-result-card unreachable">
-                                    <h3 className="forecast-result-title">Uh-Oh, Cash Alert!</h3>
-                                    <p className="forecast-result-text">
-                                        You are spending <span className="forecast-highlight">way more</span> than you make. You gotta cut down on spending so your money can actually grow!
+                                <div className="cast-card unreachable">
+                                    <h3 className="cast-title">Uh-Oh Alert G</h3>
+                                    <p className="cast-text">
+                                        You are spending <span className="cast-high">way more</span> than you make. You gotta cut down on spending so your money grows G
                                     </p>
                                 </div>
                             ) : (
-                                <div className="forecast-result-card">
-                                    <h3 className="forecast-result-title">Goal Target Forecast</h3>
-                                    <p className="forecast-result-text">
-                                        At your current monthly savings rate of {formatCurrency(compute.saving)}, you will achieve your target of {formatCurrency(savingsGoal)} in{' '}
-                                        <span className="forecast-highlight">
+                                <div className="cast-card">
+                                    <h3 className="cast-title">Goal Target</h3>
+                                    <p className="cast-text">
+                                        At this monthly saving G {formatCurrency(compute.saving)} you will achieve your target {formatCurrency(savingsGoal)} in{' '}
+                                        <span className="cast-high">
                                             {analysiss.monthsToGoal.toFixed(1)} months
                                         </span>{' '}
-                                        ({(analysiss.monthsToGoal / 12).toFixed(1)} years) under linear growth.
+                                        ({(analysiss.monthsToGoal / 12).toFixed(1)} years) under growth.
                                     </p>
                                 </div>
                             )}
@@ -755,9 +756,9 @@ export default function Income() {
                                         <thead>
                                             <tr>
                                                 <th>Horizon</th>
-                                                <th>Linear Savings</th>
-                                                <th>Compound Yield</th>
-                                                <th>Compound Premium</th>
+                                                <th>Savings</th>
+                                                <th>Cmp Yield</th>
+                                                <th>Cmp Premium</th>
                                             </tr>
                                         </thead>
                                         <tbody>
